@@ -1,1 +1,0 @@
-{"rustc":5380161196970549020,"features":"[]","target":15046347663468977171,"profile":8027308560241630171,"path":1036222786711178230,"deps":[["itertools v0.7.11","itertools",288697160080421524]],"local":[{"MtimeBased":[[1543748037,740218277],".fingerprint/aoc02-aa5d5289a07dbd94/dep-bin-aoc02-aa5d5289a07dbd94"]}],"rustflags":[],"edition":"Edition2015"}
