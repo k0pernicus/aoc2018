@@ -4,8 +4,8 @@ use itertools::Itertools;
 
 use std::collections::BTreeMap;
 use std::env;
-use std::io::{BufRead, BufReader};
 use std::fs::File;
+use std::io::{BufRead, BufReader};
 
 fn get_combination(lines: &[String]) -> u64 {
     let mut count_2_value = 0;
@@ -16,30 +16,48 @@ fn get_combination(lines: &[String]) -> u64 {
             *count.entry(c).or_insert(0) += 1;
         }
         // Get the occurences for each character
-        let occurences : Vec<u64> = count.values().cloned().collect();
+        let occurences: Vec<u64> = count.values().cloned().collect();
         // Remove all duplicates
-        let unique_occurences : Vec<u64> = occurences.into_iter().unique().collect();
+        let unique_occurences: Vec<u64> = occurences.into_iter().unique().collect();
         // Count the number of 2 and 3 values
-        unique_occurences.iter().foreach(|i| if i == &2 { count_2_value += 1 } else if i == &3 { count_3_value += 1 });
+        unique_occurences.iter().foreach(|i| {
+            if i == &2 {
+                count_2_value += 1
+            } else if i == &3 {
+                count_3_value += 1
+            }
+        });
     }
-    return count_2_value * count_3_value
+    return count_2_value * count_3_value;
 }
 
 fn get_common_chars(lines: &[String]) -> String {
     for i in 0..lines.len() {
         let c_string = &lines[i];
         for o_lines in lines[i..].iter() {
-            let matching = c_string.chars()
-                                   .zip(o_lines.chars()).filter(|&(a, b)| a == b);
+            let matching = c_string
+                .chars()
+                .zip(o_lines.chars())
+                .filter(|&(a, b)| a == b);
             if matching.clone().count() == c_string.len() - 1 {
-                println!("Found interesting strings: \"{}\" / \"{}\"", c_string, o_lines);
-                println!("> Common base is \"{}\"", matching.collect::<Vec<(char, char)>>()
-                                                      .iter()
-                                                      .fold("".to_string(), |mut s, c| {s.push(c.0); s}));
+                println!(
+                    "Found interesting strings: \"{}\" / \"{}\"",
+                    c_string, o_lines
+                );
+                println!(
+                    "> Common base is \"{}\"",
+                    matching.collect::<Vec<(char, char)>>().iter().fold(
+                        "".to_string(),
+                        |mut s, c| {
+                            s.push(c.0);
+                            s
+                        }
+                    )
+                );
             }
         }
     }
-    return String::new()
+    return String::new();
 }
 
 fn main() {
@@ -50,7 +68,13 @@ fn main() {
         std::process::exit(1);
     }
     let f_pointer = File::open(&args[1]).expect("Unable to open the given file");
-    let f_lines: Vec<String> = BufReader::new(f_pointer).lines().map(|line| line.unwrap()).collect();
-    println!("The result for the first part is {}", get_combination(&f_lines[..]));
+    let f_lines: Vec<String> = BufReader::new(f_pointer)
+        .lines()
+        .map(|line| line.unwrap())
+        .collect();
+    println!(
+        "The result for the first part is {}",
+        get_combination(&f_lines[..])
+    );
     get_common_chars(&f_lines[..]);
 }

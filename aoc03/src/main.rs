@@ -31,14 +31,17 @@ impl FromStr for Area {
 
     fn from_str(s: &str) -> Result<Area> {
         lazy_static! {
-            static ref RE: Regex = Regex::new(r"(?x)
+            static ref RE: Regex = Regex::new(
+                r"(?x)
                 \#
                 (?P<id>[0-9]+)
                 \s+@\s+
                 (?P<fl>[0-9]+),(?P<ft>[0-9]+):
                 \s+
                 (?P<w>[0-9]+)x(?P<h>[0-9]+)
-            ").unwrap();
+            "
+            )
+            .unwrap();
         }
 
         let caps = match RE.captures(s) {
@@ -68,11 +71,15 @@ fn part_1(lines: Vec<String>) -> usize {
         }
     }
     // Search for the number of overlapping areas
-    fabric.iter()
-          .map(|l| l.into_iter().filter(|&&i| i > 1).count())
-          .collect::<Vec<usize>>()
-          .iter()
-          .fold(0usize, |mut s, i| {s += i; s})
+    fabric
+        .iter()
+        .map(|l| l.into_iter().filter(|&&i| i > 1).count())
+        .collect::<Vec<usize>>()
+        .iter()
+        .fold(0usize, |mut s, i| {
+            s += i;
+            s
+        })
 }
 
 fn part_2(lines: Vec<String>) -> usize {
@@ -88,7 +95,7 @@ fn part_2(lines: Vec<String>) -> usize {
         }
     }
     // original_ids will contains all the box IDs (as, maybe, the ids are not consecutive...)
-    let mut original_ids : HashSet<usize> = HashSet::new();
+    let mut original_ids: HashSet<usize> = HashSet::new();
     // Fill the structure
     for line in lines {
         let area = Area::from_str(&line).unwrap();
@@ -103,8 +110,11 @@ fn part_2(lines: Vec<String>) -> usize {
     for i in 0..HEIGHT {
         for j in 0..WIDTH {
             if fabric[i][j].len() > 1 {
-                fabric[i][j].iter()
-                            .for_each(|x| { if original_ids.contains(&x) { let _ = original_ids.remove(x); }});
+                fabric[i][j].iter().for_each(|x| {
+                    if original_ids.contains(&x) {
+                        let _ = original_ids.remove(x);
+                    }
+                });
             }
         }
     }
@@ -120,7 +130,10 @@ fn main() {
         std::process::exit(1);
     }
     let f_pointer = File::open(&args[1]).expect("Unable to open the given file");
-    let f_lines: Vec<String> = BufReader::new(f_pointer).lines().map(|line| line.unwrap()).collect();
+    let f_lines: Vec<String> = BufReader::new(f_pointer)
+        .lines()
+        .map(|line| line.unwrap())
+        .collect();
     // Compute the squares -- PART 1
     let nb_occupied_squares = part_1(f_lines.clone());
     println!("Nb occupied squares is {}", nb_occupied_squares);
