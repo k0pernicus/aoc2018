@@ -2,8 +2,6 @@ import math
 import sequtils
 import strutils
 
-const filePath = "input.txt"
-
 type lines = seq[string]
 
 proc parse(filePath: string): lines =
